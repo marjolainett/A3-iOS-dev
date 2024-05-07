@@ -11,35 +11,77 @@ struct TodoView: View {
     @Binding var taskLists: [TaskList]
     @State private var selectedListIndex: Int = 0
     @State private var newTaskTitle: String = ""
+    @State private var newTaskDate: Date = Date()
+    @State private var newTaskTime: Date = Date()
+    let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        return formatter
+    }()
+    let hourFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }()
+
 
     var body: some View {
         VStack {
+           
             // Picker to select a specific list
             Picker("Select List", selection: $selectedListIndex) {
                 ForEach(0..<taskLists.count, id: \.self) { index in
-                    Text(taskLists[index].title).tag(index)
+                    Text(taskLists[index].title)
+                        .tag(index)
+    
                 }
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
 
             // Task list display
-            List {
-                ForEach(taskLists[selectedListIndex].tasks) { task in
-                    HStack {
-                        Text(task.title)
-                        Spacer()
-                        if task.isCompleted {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(.green)
-                        }
+            List ($taskLists[selectedListIndex].tasks.sorted(by: {
+                if $0.wrappedValue.isCompleted != $1.wrappedValue.isCompleted {
+                    return !$0.wrappedValue.isCompleted && $1.wrappedValue.isCompleted
+                } else {
+                    if $0.wrappedValue.deadline != $1.wrappedValue.deadline {
+                        return $0.wrappedValue.deadline < $1.wrappedValue.deadline
+                    } else {
+                        return $0.wrappedValue.hour < $1.wrappedValue.hour
                     }
+                }
+            })){
+                $task in
+                HStack {
+                    Text(task.title)
+                    Text(dateFormatter.string(from: task.deadline))
+                        .font(.caption)
+                    Text(hourFormatter.string(from: task.hour))
+                        .font(.caption)
+                    Spacer()
+                    
+                    Image(systemName:task.isCompleted ? "checkmark.square" :"square")
+                        .onTapGesture(perform: {
+                            task.isCompleted.toggle()
+                            
+                        })
+                    Image(systemName: "trash")
+                        .onTapGesture {
+                            if let index = taskLists[selectedListIndex].tasks.firstIndex(where: { $0.id == task.id }) {
+                                taskLists[selectedListIndex].tasks.remove(at: index)
+                            }
+                            
+                            
+                        }
                 }
             }
 
             // Add a new task
             HStack {
                 TextField("New Task", text: $newTaskTitle)
+                Spacer()
+                DatePicker("", selection: $newTaskDate, displayedComponents: .date)
+                DatePicker("", selection: $newTaskTime, displayedComponents: .hourAndMinute)
                 Button("Add Task") {
                     addTask()
                 }
@@ -52,10 +94,14 @@ struct TodoView: View {
     // Function to add a new task to the selected list
     func addTask() {
         if !newTaskTitle.isEmpty {
-            let newTask = Task(title: newTaskTitle)
+            let newTask = Task(title: newTaskTitle, deadline: newTaskDate, hour: newTaskTime)
             taskLists[selectedListIndex].tasks.append(newTask)
             newTaskTitle = ""
+            newTaskDate = Date()
         }
+    }
+    func newList(){
+        
     }
 }
 
