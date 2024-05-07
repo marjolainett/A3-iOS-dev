@@ -23,7 +23,7 @@ struct ContentView: View {
                 Spacer()
 
                 NavigationLink(destination: TodoView(taskLists: $taskLists)) {
-                    Text("To List")
+                    Text("To-Do List")
                         .font(.title)
                 }
                 .padding(50)

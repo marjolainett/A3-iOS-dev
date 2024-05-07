@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TodoView: View {
     @Binding var taskLists: [TaskList]
+    @State private var newListName = ""
     @State private var selectedListIndex: Int = 0
     @State private var newTaskTitle: String = ""
     @State private var newTaskDate: Date = Date()
@@ -27,7 +28,12 @@ struct TodoView: View {
 
     var body: some View {
         VStack {
-           
+            Button(action: {
+                        
+                        newList()
+                    }) {
+                        Text("Add a new T-Do List!")
+                    }
             // Picker to select a specific list
             Picker("Select List", selection: $selectedListIndex) {
                 ForEach(0..<taskLists.count, id: \.self) { index in
@@ -101,9 +107,27 @@ struct TodoView: View {
         }
     }
     func newList(){
-        
+        let alert = UIAlertController(title: "New List", message: "Enter the name of the new list", preferredStyle: .alert)
+               
+               alert.addTextField { textField in
+                   textField.placeholder = "To-Do List"
+               }
+               
+               let addAction = UIAlertAction(title: "Add", style: .default) { _ in
+                   if let newListName = alert.textFields?.first?.text, !newListName.isEmpty {
+                       taskLists.append(TaskList(title: newListName))
+                   }
+               }
+               alert.addAction(addAction)
+               
+               let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+               alert.addAction(cancelAction)
+               
+               // Présenter l'alerte
+               UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
+           }
     }
-}
+
 
 #Preview {
     TodoView(taskLists: .constant([
