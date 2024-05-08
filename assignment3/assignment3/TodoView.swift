@@ -32,7 +32,7 @@ struct TodoView: View {
                         
                         newList()
                     }) {
-                        Text("Add a new T-Do List!")
+                        Text("Add a new To-Do List!")
                     }
             // Picker to select a specific list
             Picker("Select List", selection: $selectedListIndex) {
@@ -123,7 +123,7 @@ struct TodoView: View {
                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
                alert.addAction(cancelAction)
                
-               // Présenter l'alerte
+              
                UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
            }
     }

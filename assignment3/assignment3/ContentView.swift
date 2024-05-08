@@ -28,8 +28,8 @@ struct ContentView: View {
                 }
                 .padding(50)
 
-                NavigationLink(destination: ReminderView()) {
-                    Text("Add a Reminder")
+                NavigationLink(destination: CalendarView(taskLists: $taskLists)) {
+                    Text("Calendar")
                         .font(.title)
                 }
                 Spacer()
