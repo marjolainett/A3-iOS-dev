@@ -64,11 +64,13 @@ struct TodoView: View {
                 ForEach(taskLists[selectedListIndex].tasks.sorted(by: sortTasks)) { task in
                     HStack {
                         Text(task.title)
-                            .foregroundColor(task.priority.color)
+                            .foregroundColor(task.isCompleted ? .gray : task.priority.color)
                         Text(dateFormatter.string(from: task.deadline))
                             .font(.caption)
+                            .foregroundColor(task.isCompleted ? .gray : .primary)
                         Text(hourFormatter.string(from: task.hour))
                             .font(.caption)
+                            .foregroundColor(task.isCompleted ? .gray : .primary)
                         Spacer()
                         
                         Image(systemName:task.isCompleted ? "checkmark.square" :"square")
@@ -103,13 +105,13 @@ struct TodoView: View {
                         .frame(maxWidth: .infinity)
                         .labelsHidden()
                     Picker("Priority", selection: $selectedPriority) {
-                                            ForEach(Priority.allCases, id: \.self) { priority in
-                                                Text(priority.rawValue)
-                                                    .foregroundColor(priority.color)
-                                            }
-                                        }
-                                        .pickerStyle(SegmentedPickerStyle())
-                                        .frame(maxWidth: .infinity)
+                        ForEach(Priority.allCases, id: \.self) { priority in
+                            Text(priority.rawValue)
+                                .foregroundColor(priority.color)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .frame(maxWidth: .infinity)
                 }
             }
             .padding()

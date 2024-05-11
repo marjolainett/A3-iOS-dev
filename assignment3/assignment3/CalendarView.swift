@@ -19,41 +19,48 @@ struct CalendarView: View {
     }()
     var body: some View {
         VStack {
-                    
-                    DatePicker("Select a date", selection: $selectedDate, displayedComponents: .date)
-                        .datePickerStyle(GraphicalDatePickerStyle())
-                        .padding()
+            
+            DatePicker("Select a date", selection: $selectedDate, displayedComponents: .date)
+                .datePickerStyle(GraphicalDatePickerStyle())
+                .padding(.horizontal)
             
             Text("To Do on: \(selectedDate, formatter: dateFormatter)")
-                .padding()
-            ForEach($taskLists) { $taskList in
-                ForEach($taskList.tasks) { $task in
-                    if Calendar.current.isDate($task.deadline.wrappedValue, inSameDayAs: selectedDate) {
-                        HStack {
-                            Text($task.title.wrappedValue)
-                            Text(dateFormatter.string(from: $task.deadline.wrappedValue))
-                                .font(.caption)
-                            Text(hourFormatter.string(from: $task.hour.wrappedValue))
-                                .font(.caption)
-                            Spacer()
-                            
-                            Image(systemName: $task.isCompleted.wrappedValue ? "checkmark.square" : "square")
-                                .onTapGesture {
-                                    $task.isCompleted.wrappedValue.toggle()
-                                }
-                            Image(systemName: "trash")
-                                .onTapGesture {
-                                    if let index = $taskLists.wrappedValue[selectedListIndex].tasks.firstIndex(where: { $0.id == $task.id }) {
-                                        $taskLists.wrappedValue[selectedListIndex].tasks.remove(at: index)
+            List {
+                ForEach($taskLists) { $taskList in
+                    ForEach($taskList.tasks) { $task in
+                        if Calendar.current.isDate($task.deadline.wrappedValue, inSameDayAs: selectedDate) {
+                            HStack {
+                                Text(task.title)
+                                    .foregroundColor(task.isCompleted ? .gray : task.priority.color)
+                                Text(dateFormatter.string(from: task.deadline))
+                                    .font(.caption)
+                                    .foregroundColor(task.isCompleted ? .gray : .primary)
+                                Text(hourFormatter.string(from: task.hour))
+                                    .font(.caption)
+                                    .foregroundColor(task.isCompleted ? .gray : .primary)
+                                Spacer()
+                                
+                                Image(systemName:task.isCompleted ? "checkmark.square" :"square")
+                                    .onTapGesture {
+                                        if let index = taskLists[selectedListIndex].tasks.firstIndex(where: { $0.id == task.id }) {
+                                            taskLists[selectedListIndex].tasks[index].isCompleted.toggle()
+                                        }
                                     }
-                                }
+                                Image(systemName: "trash")
+                                    .onTapGesture {
+                                        if let index = taskLists[selectedListIndex].tasks.firstIndex(where: { $0.id == task.id }) {
+                                            taskLists[selectedListIndex].tasks.remove(at: index)
+                                        }
+                                    }
+                            }
                         }
                     }
                 }
             }
-            Spacer()
-                }
-            }
+        }
+        .navigationTitle("Calendar")
+    }
+}
 
             let dateFormatter: DateFormatter = {
                 let formatter = DateFormatter()
@@ -61,7 +68,7 @@ struct CalendarView: View {
                 formatter.timeStyle = .none
                 return formatter
             }()
-        }
+
 
 #Preview {
     CalendarView(taskLists: .constant([

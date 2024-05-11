@@ -9,9 +9,9 @@ import Foundation
 import SwiftUI
 
 enum Priority: String, CaseIterable {
-    case low = "L"
-    case medium = "M"
-    case high = "H"
+    case low = "!"
+    case medium = "!!"
+    case high = "!!!"
     
     var color: Color {
         switch self {
