@@ -24,7 +24,7 @@ struct CalendarView: View {
                         .datePickerStyle(GraphicalDatePickerStyle())
                         .padding()
             
-            Text("To Do on : \(selectedDate, formatter: dateFormatter)")
+            Text("To Do on: \(selectedDate, formatter: dateFormatter)")
                 .padding()
             ForEach($taskLists) { $taskList in
                 ForEach($taskList.tasks) { $task in

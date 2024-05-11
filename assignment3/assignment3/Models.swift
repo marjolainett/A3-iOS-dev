@@ -6,6 +6,24 @@
 //
 
 import Foundation
+import SwiftUI
+
+enum Priority: String, CaseIterable {
+    case low = "L"
+    case medium = "M"
+    case high = "H"
+    
+    var color: Color {
+        switch self {
+        case .low:
+            return .green
+        case .medium:
+            return .yellow
+        case .high:
+            return .red
+        }
+    }
+}
 
 struct Task: Identifiable {
     let id = UUID()
@@ -13,6 +31,7 @@ struct Task: Identifiable {
     var isCompleted: Bool = false
     var deadline: Date
     var hour: Date
+    var priority: Priority // Add priority property
 }
 
 struct TaskList: Identifiable {
