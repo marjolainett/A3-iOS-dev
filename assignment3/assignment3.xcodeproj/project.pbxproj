@@ -38,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4A0D3BB72BF43B64007C42A4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4A3FF2692BE468BE00CA5511 /* assignment3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = assignment3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A3FF26C2BE468BE00CA5511 /* assignment3App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = assignment3App.swift; sourceTree = "<group>"; };
 		4A3FF26E2BE468BE00CA5511 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -82,6 +83,7 @@
 		4A3FF2602BE468BE00CA5511 = {
 			isa = PBXGroup;
 			children = (
+				4A0D3BB72BF43B64007C42A4 /* README.md */,
 				4A3FF26B2BE468BE00CA5511 /* assignment3 */,
 				4A3FF27C2BE468C000CA5511 /* assignment3Tests */,
 				4A3FF2862BE468C100CA5511 /* assignment3UITests */,
